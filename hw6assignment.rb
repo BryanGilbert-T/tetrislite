@@ -4,22 +4,39 @@
 # This is the only file you turn in, so do not modify the other files as
 # part of your solution.
 
+
 class MyPiece < Piece
   # The constant All_My_Pieces should be declared here
-  All_Pieces = Piece::All_Pieces.push(
+  All_My_Pieces = Piece::All_Pieces + [
+    Piece.rotations([[0, 0], [1, 0], [0, 1]]), # This block
     Piece.rotations([[0, 0], [1, 0], [0, -1], [1, -1], [2, -1]]), # 3 x 2 Block but the top right is empty
     [[[0, 0], [0, -1], [0, -2], [0, 1], [0, 2], [0, 3]], # 5 long block 5 x 1 we only need 2 variations
-     [[0, 0], [-1, 0], [-2, 0], [1, 0], [2, 0], [3, 0]]],
-    Piece.rotations([[0, 0], [1, 0], [0, 1]]) # 2 x 2 block with the top left empty
-  )
+     [[0, 0], [-1, 0], [-2, 0], [1, 0], [2, 0], [3, 0]]]
+  ]
 
   # your enhancements here
+
+  def self.next_piece (board)
+    Piece.new(All_My_Pieces.sample, board)
+  end
 
 end
 
 class MyBoard < Board
   # your enhancements here
 
+  def initialize(game)
+    @grid = Array.new(num_rows) {Array.new(num_columns)}
+    @current_block = MyPiece.next_piece(self)
+    @score = 0
+    @game = game
+    @delay = 500
+  end
+
+  def next_piece
+    @current_block = MyPiece.next_piece(self)
+    @current_pos = nil
+  end
 end
 
 class MyTetris < Tetris
