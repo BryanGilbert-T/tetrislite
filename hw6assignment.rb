@@ -4,11 +4,10 @@
 # This is the only file you turn in, so do not modify the other files as
 # part of your solution.
 
-
 class MyPiece < Piece
   # The constant All_My_Pieces should be declared here
   All_My_Pieces = Piece::All_Pieces + [
-    Piece.rotations([[0, 0], [1, 0], [0, 1]]), # This block
+    Piece.rotations([[0, 0], [0, 0], [1, 0], [0, 1]]), # 3 piece block, I add another identical pixel because the store_current algorithm makes me to do so
     Piece.rotations([[0, 0], [1, 0], [0, -1], [1, -1], [2, -1]]), # 3 x 2 Block but the top right is empty
     [[[0, 0], [0, -1], [0, -2], [0, 1], [0, 2], [0, 3]], # 5 long block 5 x 1 we only need 2 variations
      [[0, 0], [-1, 0], [-2, 0], [1, 0], [2, 0], [3, 0]]]
@@ -17,7 +16,7 @@ class MyPiece < Piece
   # your enhancements here
 
   def self.next_piece (board)
-    Piece.new(All_My_Pieces.sample, board)
+    MyPiece.new(All_My_Pieces.sample, board)
   end
 
 end
@@ -41,6 +40,14 @@ end
 
 class MyTetris < Tetris
   # your enhancements here
+
+  def set_board
+    @canvas = TetrisCanvas.new
+    @board = MyBoard.new(self)
+    @canvas.place(@board.block_size * @board.num_rows + 3,
+                  @board.block_size * @board.num_columns + 6, 24, 80)
+    @board.draw
+  end
 
   def key_bindings
     @root.bind('u', proc{@board.rotate_clockwise; @board.rotate_clockwise})
