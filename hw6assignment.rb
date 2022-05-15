@@ -10,7 +10,7 @@ class MyPiece < Piece
     Piece.rotations([[0, 0], [1, 0], [0, -1], [1, -1], [2, -1]]), # 3 x 2 Block but the top right is empty
     [[[0, 0], [0, -1], [0, -2], [0, 1], [0, 2], [0, 3]], # 5 long block 5 x 1 we only need 2 variations
      [[0, 0], [-1, 0], [-2, 0], [1, 0], [2, 0], [3, 0]]],
-    Piece.rotations([[0, 0], [1, 0], [0, 1]])
+    Piece.rotations([[0, 0], [1, 0], [0, 1]]) # 2 x 2 block with the top left empty
   )
 
   # your enhancements here
