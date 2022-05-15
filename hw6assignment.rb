@@ -7,7 +7,7 @@
 class MyPiece < Piece
   # The constant All_My_Pieces should be declared here
   All_My_Pieces = Piece::All_Pieces + [
-    Piece.rotations([[0, 0], [0, 0], [1, 0], [0, 1]]), # 3 piece block, I add another identical pixel because the store_current algorithm makes me to do so
+    Piece.rotations([[0, 0], [1, 0], [0, 1]]), # 3 piece block, I add another identical pixel because the store_current algorithm makes me to do so
     Piece.rotations([[0, 0], [1, 0], [0, -1], [1, -1], [2, -1]]), # 3 x 2 Block but the top right is empty
     [[[0, 0], [0, -1], [0, -2], [0, 1], [0, 2], [0, 3]], # 5 long block 5 x 1 we only need 2 variations
      [[0, 0], [-1, 0], [-2, 0], [1, 0], [2, 0], [3, 0]]]
@@ -35,6 +35,18 @@ class MyBoard < Board
   def next_piece
     @current_block = MyPiece.next_piece(self)
     @current_pos = nil
+  end
+
+  def store_current
+    locations = @current_block.current_rotation
+    displacement = @current_block.position
+    (0..3).each{|index| 
+      current = locations[index];
+      @grid[current[1]+displacement[1]][current[0]+displacement[0]] = 
+      @current_pos[index]
+    }
+    remove_filled
+    @delay = [@delay - 2, 80].max
   end
 end
 
