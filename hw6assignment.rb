@@ -13,6 +13,9 @@ class MyPiece < Piece
      [[0, 0], [-1, 0], [-2, 0], [1, 0], [2, 0], [3, 0]]]
   ]
 
+  def self.cheat_piece (board)
+      MyPiece.new([[[0, 0]]], board)
+  end
   # your enhancements here
 
   def self.next_piece (board)
@@ -30,17 +33,29 @@ class MyBoard < Board
     @score = 0
     @game = game
     @delay = 500
+    @cheat = false
+  end
+
+  def cheat
+    if score >= 100 && !@cheat 
+      @cheat = true
+      @score -= 100
+    end
   end
 
   def next_piece
     @current_block = MyPiece.next_piece(self)
+    if @cheat 
+      @current_block = MyPiece.cheat_piece(self)
+      @cheat = false
+    end
     @current_pos = nil
   end
 
   def store_current
     locations = @current_block.current_rotation
     displacement = @current_block.position
-    (0..3).each{|index| 
+    (0..(locations.length - 1)).each{|index| 
       current = locations[index];
       @grid[current[1]+displacement[1]][current[0]+displacement[0]] = 
       @current_pos[index]
@@ -63,6 +78,7 @@ class MyTetris < Tetris
 
   def key_bindings
     @root.bind('u', proc{@board.rotate_clockwise; @board.rotate_clockwise})
+    @root.bind('c', proc{@board.cheat})
     @root.bind('n', proc {self.new_game}) 
 
     @root.bind('p', proc {self.pause}) 
